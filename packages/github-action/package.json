@@ -1,0 +1,20 @@
+{
+  "name": "@preview/github-action",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@preview/core": "workspace:*",
+    "@actions/core": "^1.11.0",
+    "@actions/github": "^6.0.0"
+  }
+}

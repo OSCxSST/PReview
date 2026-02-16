@@ -1,0 +1,31 @@
+{
+  "name": "@preview/api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@preview/core": "workspace:*",
+    "@preview/db": "workspace:*",
+    "fastify": "^5.2.0",
+    "@fastify/cookie": "^11.0.0",
+    "@fastify/cors": "^11.0.0",
+    "bullmq": "^5.34.0",
+    "ioredis": "^5.4.0",
+    "octokit": "^4.1.0",
+    "@octokit/webhooks": "^13.6.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
+  }
+}
