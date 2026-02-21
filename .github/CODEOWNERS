@@ -1,4 +1,5 @@
 # CI/CD workflows
+.github/ @Jenish-1235
 .github/workflows/ @Jenish-1235
 
 # Infrastructure changes
