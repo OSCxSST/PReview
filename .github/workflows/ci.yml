@@ -90,5 +90,15 @@ jobs:
           pip install --quiet diff-cover
           find packages -name "lcov.info" -exec cat {} + > merged-lcov.info 2>/dev/null || true
           if [ -s merged-lcov.info ]; then
-            diff-cover merged-lcov.info --compare-branch=origin/main --fail-under=85
+            diff-cover merged-lcov.info --compare-branch=origin/main --fail-under=85 | tee diff-cover-report.txt
           fi
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            packages/*/coverage/
+            merged-lcov.info
+            diff-cover-report.txt
+          retention-days: 30
