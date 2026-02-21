@@ -6,13 +6,13 @@ labels: bug
 assignees: ""
 ---
 
-## 🐛 Description
+## Description
 
 A clear and concise description of the bug.
 
 ---
 
-## 🔁 Steps to Reproduce
+## Steps to Reproduce
 
 1. Go to '...'
 2. Click on '...'
@@ -21,19 +21,19 @@ A clear and concise description of the bug.
 
 ---
 
-## ✅ Expected Behavior
+## Expected Behavior
 
 A clear description of what you expected to happen.
 
 ---
 
-## 📸 Screenshots (if applicable)
+## Screenshots (if applicable)
 
 Add screenshots to help explain your problem.
 
 ---
 
-## 🖥️ Environment
+## Environment
 
 - OS:
 - Node version:
@@ -41,6 +41,6 @@ Add screenshots to help explain your problem.
 
 ---
 
-## ➕ Additional context
+## Additional context
 
 Add any other context about the problem here.

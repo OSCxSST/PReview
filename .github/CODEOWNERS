@@ -1,2 +1,5 @@
-# Default owners for all files
-* @OSCxSST
+# CI/CD workflows
+.github/workflows/ @Jenish-1235
+
+# Infrastructure changes
+docker/ @Jenish-1235

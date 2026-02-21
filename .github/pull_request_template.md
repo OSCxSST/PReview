@@ -1,16 +1,16 @@
-## 📌 Description
+## Description
 
 Please include a summary of the changes and why they are needed.
 
 ---
 
-## 🔗 Related Issue
+## Related Issue
 
 Fixes # (issue number)
 
 ---
 
-## 🛠️ Type of Change
+## Type of Change
 
 - [ ] Bug fix
 - [ ] New feature
@@ -20,7 +20,7 @@ Fixes # (issue number)
 
 ---
 
-## ✅ Checklist
+## Checklist
 
 - [ ] My code follows the style guidelines of this project
 - [ ] My changes are limited to this issue
