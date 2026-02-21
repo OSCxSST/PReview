@@ -17,7 +17,6 @@
   "dependencies": {
     "@fastify/cookie": "^11.0.0",
     "@fastify/cors": "^11.0.0",
-    "@octokit/auth-app": "^8.2.0",
     "@octokit/webhooks": "^13.6.0",
     "@preview/core": "workspace:*",
     "@preview/db": "workspace:*",

@@ -6,6 +6,7 @@ import { webhookRoutes } from "./routes/webhooks.js";
 import { startWorkers, stopWorkers } from "./workers/index.js";
 import { closeQueues } from "./queue/index.js";
 import { closeRedis } from "./queue/connection.js";
+import { closeDb } from "@preview/db";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const server = Fastify({
@@ -44,12 +45,21 @@ async function start(): Promise<void> {
     server.log.info("Shutting down...");
     await stopWorkers();
     await closeQueues();
+    await closeDb();
     await closeRedis();
     await server.close();
   };
 
-  process.on("SIGTERM", () => void shutdown());
-  process.on("SIGINT", () => void shutdown());
+  process.on("SIGTERM", () => {
+    shutdown().catch((err) => {
+      server.log.error({ err }, "Error during shutdown");
+    });
+  });
+  process.on("SIGINT", () => {
+    shutdown().catch((err) => {
+      server.log.error({ err }, "Error during shutdown");
+    });
+  });
 
   await server.listen({ port, host });
 }

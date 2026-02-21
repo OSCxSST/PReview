@@ -1,6 +1,6 @@
 import { Worker, type Job } from "bullmq";
 import { getDb, repositories, pullRequests } from "@preview/db";
-import { getInstallationOctokit } from "../github/index.js";
+import { getInstallationOctokit, paginateAll } from "../github/index.js";
 import { getRedisUrl } from "../queue/connection.js";
 import { QUEUE_NAMES } from "../queue/queues.js";
 
@@ -98,19 +98,13 @@ async function processPREvent(job: Job<WebhookJobData>): Promise<void> {
       changedFiles: prDetail.changed_files,
     };
 
-    const { data: files } = await octokit.request(
+    const files = await paginateAll<{ filename: string }>(
+      octokit,
       "GET /repos/{owner}/{repo}/pulls/{pull_number}/files",
-      {
-        owner,
-        repo: repoName,
-        pull_number: ghPR.number,
-        per_page: 100,
-      },
+      { owner, repo: repoName, pull_number: ghPR.number },
     );
 
-    filesChanged = files.map(
-      (f: { filename: string }) => f.filename,
-    );
+    filesChanged = files.map((f) => f.filename);
   } catch (err) {
     job.log(`Failed to fetch PR details: ${String(err)}`);
   }

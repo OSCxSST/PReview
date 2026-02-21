@@ -30,6 +30,7 @@ export function startWorkers(): void {
 }
 
 export async function stopWorkers(): Promise<void> {
-  await Promise.all(workers.map((w) => w.close()));
+  const current = workers.slice();
   workers = [];
+  await Promise.all(current.map((w) => w.close()));
 }

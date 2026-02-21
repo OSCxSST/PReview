@@ -74,74 +74,80 @@ async function processBatchSync(job: Job<BatchSyncJobData>): Promise<void> {
   let totalIssues = 0;
 
   for (const ghRepo of installationRepos) {
-    const [owner, repo] = ghRepo.full_name.split("/") as [string, string];
+    try {
+      const [owner, repo] = ghRepo.full_name.split("/") as [string, string];
 
-    // Upsert repository
-    await db
-      .insert(repositories)
-      .values({
-        githubId: ghRepo.id,
-        fullName: ghRepo.full_name,
-      })
-      .onConflictDoUpdate({
-        target: repositories.githubId,
-        set: { fullName: ghRepo.full_name, updatedAt: new Date() },
-      });
+      // Upsert repository
+      await db
+        .insert(repositories)
+        .values({
+          githubId: ghRepo.id,
+          fullName: ghRepo.full_name,
+        })
+        .onConflictDoUpdate({
+          target: repositories.githubId,
+          set: { fullName: ghRepo.full_name, updatedAt: new Date() },
+        });
 
-    // Fetch all open PRs
-    job.log(`Syncing open PRs for ${ghRepo.full_name}...`);
-    const openPRs = await paginateAll<GitHubPR>(
-      octokit,
-      "GET /repos/{owner}/{repo}/pulls",
-      { owner, repo, state: "open" },
-    );
+      // Fetch all open PRs
+      job.log(`Syncing open PRs for ${ghRepo.full_name}...`);
+      const openPRs = await paginateAll<GitHubPR>(
+        octokit,
+        "GET /repos/{owner}/{repo}/pulls",
+        { owner, repo, state: "open" },
+      );
 
-    for (const pr of openPRs) {
-      await prQueue.add(`batch-sync.pr.${ghRepo.full_name}#${pr.number}`, {
-        event: "pull_request",
-        action: "opened",
-        deliveryId: `batch-sync-${job.id}`,
-        payload: {
-          pull_request: pr,
-          repository: { id: ghRepo.id, full_name: ghRepo.full_name },
-          installation: { id: installation.id },
-        },
-        receivedAt: new Date().toISOString(),
-      });
-    }
-
-    totalPRs += openPRs.length;
-    job.log(`Enqueued ${openPRs.length} PRs for ${ghRepo.full_name}`);
-
-    // Fetch all open issues (excluding PRs)
-    job.log(`Syncing open issues for ${ghRepo.full_name}...`);
-    const openIssues = await paginateAll<GitHubIssue>(
-      octokit,
-      "GET /repos/{owner}/{repo}/issues",
-      { owner, repo, state: "open" },
-    );
-
-    const issuesOnly = openIssues.filter((i) => !i.pull_request);
-
-    for (const issue of issuesOnly) {
-      await issueQueue.add(
-        `batch-sync.issue.${ghRepo.full_name}#${issue.number}`,
-        {
-          event: "issues",
+      for (const pr of openPRs) {
+        await prQueue.add(`batch-sync.pr.${ghRepo.full_name}#${pr.number}`, {
+          event: "pull_request",
           action: "opened",
           deliveryId: `batch-sync-${job.id}`,
           payload: {
-            issue,
+            pull_request: pr,
             repository: { id: ghRepo.id, full_name: ghRepo.full_name },
             installation: { id: installation.id },
           },
           receivedAt: new Date().toISOString(),
-        },
+        });
+      }
+
+      totalPRs += openPRs.length;
+      job.log(`Enqueued ${openPRs.length} PRs for ${ghRepo.full_name}`);
+
+      // Fetch all open issues (excluding PRs)
+      job.log(`Syncing open issues for ${ghRepo.full_name}...`);
+      const openIssues = await paginateAll<GitHubIssue>(
+        octokit,
+        "GET /repos/{owner}/{repo}/issues",
+        { owner, repo, state: "open" },
+      );
+
+      const issuesOnly = openIssues.filter((i) => !i.pull_request);
+
+      for (const issue of issuesOnly) {
+        await issueQueue.add(
+          `batch-sync.issue.${ghRepo.full_name}#${issue.number}`,
+          {
+            event: "issues",
+            action: "opened",
+            deliveryId: `batch-sync-${job.id}`,
+            payload: {
+              issue,
+              repository: { id: ghRepo.id, full_name: ghRepo.full_name },
+              installation: { id: installation.id },
+            },
+            receivedAt: new Date().toISOString(),
+          },
+        );
+      }
+
+      totalIssues += issuesOnly.length;
+      job.log(`Enqueued ${issuesOnly.length} issues for ${ghRepo.full_name}`);
+    } catch (err) {
+      job.log(
+        `Failed to sync ${ghRepo.full_name}: ${String(err)}. Continuing with remaining repos.`,
       );
     }
-
-    totalIssues += issuesOnly.length;
-    job.log(`Enqueued ${issuesOnly.length} issues for ${ghRepo.full_name}`);
 
     await job.updateProgress({
       repos: installationRepos.length,
