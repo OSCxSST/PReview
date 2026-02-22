@@ -6,7 +6,11 @@
     "moduleResolution": "Bundler",
     "jsx": "preserve",
     "allowJs": true,
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "outDir": "dist",
     "noEmit": true,
     "incremental": true
