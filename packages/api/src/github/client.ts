@@ -35,6 +35,7 @@ export async function getInstallationOctokit(
 }
 
 /** ETag cache for conditional requests to reduce rate limit consumption. */
+const ETAG_CACHE_MAX_SIZE = 1000;
 const etagCache = new Map<string, { etag: string; data: unknown }>();
 
 /**
@@ -62,7 +63,12 @@ export async function fetchWithEtag<T>(
 
     const etag = response.headers.etag;
     if (etag) {
+      etagCache.delete(cacheKey);
       etagCache.set(cacheKey, { etag, data: response.data });
+      if (etagCache.size > ETAG_CACHE_MAX_SIZE) {
+        const oldest = etagCache.keys().next().value!;
+        etagCache.delete(oldest);
+      }
     }
 
     return { data: response.data as T, fromCache: false };
