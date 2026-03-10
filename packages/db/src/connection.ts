@@ -16,9 +16,9 @@ export function getDb(): Database {
   }
 
   sql = postgres(url, {
-    max: 10,
-    idle_timeout: 20,
-    connect_timeout: 10,
+    max: parseInt(process.env["DB_POOL_MAX"] ?? "10"),
+    idle_timeout: parseInt(process.env["DB_IDLE_TIMEOUT"] ?? "20"),
+    connect_timeout: parseInt(process.env["DB_CONNECT_TIMEOUT"] ?? "10"),
   });
   db = drizzle(sql, { schema });
   return db;
