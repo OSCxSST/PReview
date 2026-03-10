@@ -29,7 +29,9 @@ describe("connection", () => {
   it("getDb throws when DATABASE_URL is not set", async () => {
     delete process.env["DATABASE_URL"];
     const { getDb } = await import("../connection.js");
-    expect(() => getDb()).toThrow("DATABASE_URL environment variable is required");
+    expect(() => getDb()).toThrow(
+      "DATABASE_URL environment variable is required",
+    );
   });
 
   it("getDb returns a database instance", async () => {
