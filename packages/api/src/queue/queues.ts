@@ -55,10 +55,21 @@ export function getQueue(name: string): Queue {
 }
 
 export async function closeQueues(): Promise<void> {
-  if (queues) {
-    await Promise.all(
-      Array.from(queues.values()).map((q) => q.close()),
+  if (!queues) return;
+  try {
+    const results = await Promise.allSettled(
+      Array.from(queues.entries()).map(([name, q]) =>
+        q.close().catch((err) => {
+          console.error(`Failed to close queue "${name}":`, err);
+          throw err;
+        }),
+      ),
     );
+    const failed = results.filter((r) => r.status === "rejected");
+    if (failed.length > 0) {
+      console.error(`${failed.length} queue(s) failed to close`);
+    }
+  } finally {
     queues = null;
   }
 }

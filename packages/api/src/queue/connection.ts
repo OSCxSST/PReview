@@ -21,8 +21,13 @@ export function getRedisConnection(): Redis {
 }
 
 export async function closeRedis(): Promise<void> {
-  if (connection) {
-    await connection.quit();
-    connection = null;
+  if (!connection) return;
+  const conn = connection;
+  connection = null;
+  try {
+    await conn.quit();
+  } catch (err) {
+    console.error("Redis graceful shutdown failed, forcing disconnect:", err);
+    conn.disconnect();
   }
 }
