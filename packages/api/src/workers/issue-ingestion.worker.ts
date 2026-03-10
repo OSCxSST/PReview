@@ -3,29 +3,7 @@ import { getDb, repositories, issues } from "@preview/db";
 import { getRedisUrl } from "../queue/connection.js";
 import { QUEUE_NAMES } from "../queue/queues.js";
 
-interface WebhookJobData {
-  event: string;
-  action: string;
-  deliveryId: string;
-  payload: Record<string, unknown>;
-  receivedAt: string;
-}
-
-interface GitHubIssue {
-  number: number;
-  id: number;
-  title: string;
-  body: string | null;
-  labels: Array<{ name: string } | string>;
-  created_at: string;
-  updated_at: string;
-  pull_request?: unknown;
-}
-
-interface GitHubRepo {
-  id: number;
-  full_name: string;
-}
+import type { WebhookJobData, GitHubIssue, GitHubRepo } from "./types.js";
 
 function extractLabels(labels: GitHubIssue["labels"]): string[] {
   return labels.map((l) => (typeof l === "string" ? l : l.name));

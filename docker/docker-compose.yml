@@ -33,6 +33,8 @@ services:
       dockerfile: docker/Dockerfile.api
     ports:
       - "3000:3000"
+    env_file:
+      - ../.env
     environment:
       DATABASE_URL: postgresql://preview:preview_dev@postgres:5432/preview
       REDIS_URL: redis://redis:6379
