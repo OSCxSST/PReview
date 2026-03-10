@@ -34,10 +34,22 @@ function createQueue(name: string, jobOptions: JobsOptions): Queue {
 function initQueues(): Map<string, Queue> {
   const map = new Map<string, Queue>();
 
-  map.set(QUEUE_NAMES.WEBHOOK_EVENTS, createQueue(QUEUE_NAMES.WEBHOOK_EVENTS, DEFAULT_JOB_OPTIONS));
-  map.set(QUEUE_NAMES.PR_INGESTION, createQueue(QUEUE_NAMES.PR_INGESTION, DEFAULT_JOB_OPTIONS));
-  map.set(QUEUE_NAMES.ISSUE_INGESTION, createQueue(QUEUE_NAMES.ISSUE_INGESTION, DEFAULT_JOB_OPTIONS));
-  map.set(QUEUE_NAMES.BATCH_SYNC, createQueue(QUEUE_NAMES.BATCH_SYNC, BATCH_SYNC_JOB_OPTIONS));
+  map.set(
+    QUEUE_NAMES.WEBHOOK_EVENTS,
+    createQueue(QUEUE_NAMES.WEBHOOK_EVENTS, DEFAULT_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.PR_INGESTION,
+    createQueue(QUEUE_NAMES.PR_INGESTION, DEFAULT_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.ISSUE_INGESTION,
+    createQueue(QUEUE_NAMES.ISSUE_INGESTION, DEFAULT_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.BATCH_SYNC,
+    createQueue(QUEUE_NAMES.BATCH_SYNC, BATCH_SYNC_JOB_OPTIONS),
+  );
 
   return map;
 }
@@ -56,9 +68,7 @@ export function getQueue(name: string): Queue {
 
 export async function closeQueues(): Promise<void> {
   if (queues) {
-    await Promise.all(
-      Array.from(queues.values()).map((q) => q.close()),
-    );
+    await Promise.all(Array.from(queues.values()).map((q) => q.close()));
     queues = null;
   }
 }

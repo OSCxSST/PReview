@@ -70,9 +70,7 @@ export async function webhookRoutes(server: FastifyInstance): Promise<void> {
 
       const payload = request.body as Record<string, unknown>;
       const action =
-        typeof payload["action"] === "string"
-          ? payload["action"]
-          : undefined;
+        typeof payload["action"] === "string" ? payload["action"] : undefined;
 
       const queueName = getQueueForEvent(event, action);
 

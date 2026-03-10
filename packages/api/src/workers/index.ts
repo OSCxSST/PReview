@@ -20,9 +20,7 @@ export function startWorkers(): void {
     });
 
     worker.on("failed", (job, err) => {
-      console.error(
-        `Job ${job?.id} failed on ${worker.name}: ${err.message}`,
-      );
+      console.error(`Job ${job?.id} failed on ${worker.name}: ${err.message}`);
     });
   }
 

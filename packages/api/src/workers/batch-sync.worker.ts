@@ -50,7 +50,9 @@ async function processBatchSync(job: Job<BatchSyncJobData>): Promise<void> {
   const { payload } = job.data;
   const db = getDb();
 
-  const installation = payload["installation"] as GitHubInstallation | undefined;
+  const installation = payload["installation"] as
+    | GitHubInstallation
+    | undefined;
 
   if (!installation) {
     job.log("Missing installation in payload");

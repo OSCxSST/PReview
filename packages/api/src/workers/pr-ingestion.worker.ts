@@ -45,13 +45,17 @@ async function processPREvent(job: Job<WebhookJobData>): Promise<void> {
   if (event === "issue_comment" || event === "pull_request_review") {
     // For engagement-tracking events, just log for now.
     // Phase 2+ will use these for abandonment risk scoring.
-    job.log(`Received ${event} event - engagement tracking deferred to Phase 2`);
+    job.log(
+      `Received ${event} event - engagement tracking deferred to Phase 2`,
+    );
     return;
   }
 
   const ghPR = payload["pull_request"] as GitHubPR | undefined;
   const ghRepo = payload["repository"] as GitHubRepo | undefined;
-  const installation = payload["installation"] as GitHubInstallation | undefined;
+  const installation = payload["installation"] as
+    | GitHubInstallation
+    | undefined;
 
   if (!ghPR || !ghRepo || !installation) {
     job.log("Missing required payload fields");
