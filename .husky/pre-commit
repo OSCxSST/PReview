@@ -1,0 +1,2 @@
+echo "Running staged checks..."
+pnpm lint-staged
