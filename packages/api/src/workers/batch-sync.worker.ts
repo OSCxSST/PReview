@@ -4,47 +4,15 @@ import { getInstallationOctokit, paginateAll } from "../github/index.js";
 import { getQueue, QUEUE_NAMES } from "../queue/queues.js";
 import { getRedisUrl } from "../queue/connection.js";
 
-interface BatchSyncJobData {
-  event: string;
-  action: string;
-  deliveryId: string;
-  payload: Record<string, unknown>;
-  receivedAt: string;
-}
+import type {
+  WebhookJobData,
+  GitHubInstallation,
+  GitHubInstallationRepo,
+  GitHubPR,
+  GitHubIssue,
+} from "./types.js";
 
-interface GitHubInstallation {
-  id: number;
-  account: { login: string; id: number } | null;
-}
-
-interface GitHubInstallationRepo {
-  id: number;
-  full_name: string;
-  node_id: string;
-}
-
-interface GitHubPR {
-  number: number;
-  id: number;
-  title: string;
-  body: string | null;
-  user: { login: string; id: number };
-  state: string;
-  merged_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface GitHubIssue {
-  number: number;
-  id: number;
-  title: string;
-  body: string | null;
-  labels: Array<{ name: string }>;
-  pull_request?: unknown;
-  created_at: string;
-  updated_at: string;
-}
+type BatchSyncJobData = WebhookJobData;
 
 async function processBatchSync(job: Job<BatchSyncJobData>): Promise<void> {
   const { payload } = job.data;

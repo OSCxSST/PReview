@@ -7,6 +7,7 @@ export default defineConfig({
   dbCredentials: {
     url: process.env["DATABASE_URL"] ?? "",
   },
+  // drizzle-kit has no pgvector filter; "postgis" is the closest workaround for extension columns
   extensionsFilters: ["postgis"],
   verbose: true,
   strict: true,

@@ -26,6 +26,8 @@ function getQueueForEvent(
       return QUEUE_NAMES.PR_INGESTION;
     case "issues":
       return QUEUE_NAMES.ISSUE_INGESTION;
+    // TODO(Phase 2): issue_comment fires on both PRs and issues.
+    // Currently all go to PR_INGESTION; disambiguate when adding engagement tracking.
     case "issue_comment":
     case "pull_request_review":
       return QUEUE_NAMES.PR_INGESTION;
@@ -80,13 +82,18 @@ export async function webhookRoutes(server: FastifyInstance): Promise<void> {
       }
 
       const queue = getQueue(queueName);
-      const job = await queue.add(`${event}.${action ?? "unknown"}`, {
-        event,
-        action,
-        deliveryId,
-        payload,
-        receivedAt: new Date().toISOString(),
-      });
+      const jobId = typeof deliveryId === "string" ? deliveryId : undefined;
+      const job = await queue.add(
+        `${event}.${action ?? "unknown"}`,
+        {
+          event,
+          action,
+          deliveryId,
+          payload,
+          receivedAt: new Date().toISOString(),
+        },
+        { jobId },
+      );
 
       return reply.code(202).send({ id: job.id, queue: queueName });
     },

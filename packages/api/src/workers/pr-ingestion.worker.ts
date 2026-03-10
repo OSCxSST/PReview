@@ -4,30 +4,7 @@ import { getInstallationOctokit, paginateAll } from "../github/index.js";
 import { getRedisUrl } from "../queue/connection.js";
 import { QUEUE_NAMES } from "../queue/queues.js";
 
-interface WebhookJobData {
-  event: string;
-  action: string;
-  deliveryId: string;
-  payload: Record<string, unknown>;
-  receivedAt: string;
-}
-
-interface GitHubPR {
-  number: number;
-  id: number;
-  title: string;
-  body: string | null;
-  user: { login: string; id: number };
-  state: string;
-  merged?: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface GitHubRepo {
-  id: number;
-  full_name: string;
-}
+import type { WebhookJobData, GitHubPR, GitHubRepo } from "./types.js";
 
 interface GitHubInstallation {
   id: number;

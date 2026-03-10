@@ -51,14 +51,20 @@ async function start(): Promise<void> {
   };
 
   process.on("SIGTERM", () => {
-    shutdown().catch((err) => {
-      server.log.error({ err }, "Error during shutdown");
-    });
+    shutdown()
+      .then(() => process.exit(0))
+      .catch((err) => {
+        server.log.error({ err }, "Error during shutdown");
+        process.exit(1);
+      });
   });
   process.on("SIGINT", () => {
-    shutdown().catch((err) => {
-      server.log.error({ err }, "Error during shutdown");
-    });
+    shutdown()
+      .then(() => process.exit(0))
+      .catch((err) => {
+        server.log.error({ err }, "Error during shutdown");
+        process.exit(1);
+      });
   });
 
   await server.listen({ port, host });
