@@ -14,15 +14,9 @@ export interface JudgePRInput {
   intentSummary: IntentSummary | null;
 }
 
-export function buildJudgePrompt(
-  prA: JudgePRInput,
-  prB: JudgePRInput,
-): string {
+export function buildJudgePrompt(prA: JudgePRInput, prB: JudgePRInput): string {
   const formatPR = (pr: JudgePRInput) => {
-    const parts = [
-      `Title: ${pr.title}`,
-      `Description: ${pr.body ?? "(none)"}`,
-    ];
+    const parts = [`Title: ${pr.title}`, `Description: ${pr.body ?? "(none)"}`];
     if (pr.intentSummary) {
       parts.push(`Extracted Intent: ${JSON.stringify(pr.intentSummary)}`);
     }

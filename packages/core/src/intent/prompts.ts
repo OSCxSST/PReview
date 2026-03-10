@@ -33,9 +33,7 @@ export interface DiffFallbackInput {
 
 export function buildDiffFallbackPrompt(input: DiffFallbackInput): string {
   const truncatedDiff =
-    input.diff.length > 8000
-      ? input.diff.slice(0, 8000) + "\n..."
-      : input.diff;
+    input.diff.length > 8000 ? input.diff.slice(0, 8000) + "\n..." : input.diff;
 
   return [
     `PR Title: ${input.title}`,

@@ -9,11 +9,11 @@ describe("classifySimilarity", () => {
 
   it("classifies probable duplicates", () => {
     expect(classifySimilarity(0.85)).toBe("probable");
-    expect(classifySimilarity(0.80)).toBe("probable");
+    expect(classifySimilarity(0.8)).toBe("probable");
   });
 
   it("classifies related items", () => {
-    expect(classifySimilarity(0.70)).toBe("related");
+    expect(classifySimilarity(0.7)).toBe("related");
     expect(classifySimilarity(0.65)).toBe("related");
   });
 
@@ -26,7 +26,7 @@ describe("classifySimilarity", () => {
     const custom = {
       highConfidenceDuplicate: 0.95,
       probableDuplicate: 0.85,
-      related: 0.70,
+      related: 0.7,
     };
     expect(classifySimilarity(0.93, custom)).toBe("probable");
     expect(classifySimilarity(0.95, custom)).toBe("high_confidence");

@@ -9,7 +9,8 @@ export function shouldAutoMerge(
 
 export function buildClusterSummary(memberTitles: string[]): string {
   if (memberTitles.length === 1) {
-    return memberTitles[0]!;
+    const title = memberTitles[0];
+    if (title) return title;
   }
 
   return `Group of ${memberTitles.length} related PRs: ${memberTitles.join(", ")}`;

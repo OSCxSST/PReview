@@ -97,31 +97,23 @@ describe("extractIntent", () => {
 
 describe("isLowQualityDescription", () => {
   it("flags null body", async () => {
-    const { isLowQualityDescription } = await import(
-      "../../intent/extract.js"
-    );
+    const { isLowQualityDescription } = await import("../../intent/extract.js");
     expect(isLowQualityDescription(null)).toBe(true);
   });
 
   it("flags empty body", async () => {
-    const { isLowQualityDescription } = await import(
-      "../../intent/extract.js"
-    );
+    const { isLowQualityDescription } = await import("../../intent/extract.js");
     expect(isLowQualityDescription("")).toBe(true);
     expect(isLowQualityDescription("   ")).toBe(true);
   });
 
   it("flags very short body", async () => {
-    const { isLowQualityDescription } = await import(
-      "../../intent/extract.js"
-    );
+    const { isLowQualityDescription } = await import("../../intent/extract.js");
     expect(isLowQualityDescription("fix")).toBe(true);
   });
 
   it("accepts good descriptions", async () => {
-    const { isLowQualityDescription } = await import(
-      "../../intent/extract.js"
-    );
+    const { isLowQualityDescription } = await import("../../intent/extract.js");
     expect(
       isLowQualityDescription(
         "This PR fixes the login bug by adding null check validation to the email field",

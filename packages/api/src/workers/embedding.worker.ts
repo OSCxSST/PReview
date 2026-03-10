@@ -7,9 +7,7 @@ import { getRedisUrl } from "../queue/connection.js";
 import { getQueue, QUEUE_NAMES } from "../queue/queues.js";
 import type { EmbeddingJobData, DedupJobData } from "./types.js";
 
-async function processEmbedding(
-  job: Job<EmbeddingJobData>,
-): Promise<void> {
+async function processEmbedding(job: Job<EmbeddingJobData>): Promise<void> {
   const { prId, repoId } = job.data;
   const db = getDb();
 

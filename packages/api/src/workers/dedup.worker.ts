@@ -141,8 +141,7 @@ async function processDedup(job: Job<DedupJobData>): Promise<void> {
             clusterId,
             itemType: "pr",
             itemId: candidate.id,
-            rank:
-              judgeResult.preferredPR === candidate.githubNumber ? 1 : 2,
+            rank: judgeResult.preferredPR === candidate.githubNumber ? 1 : 2,
             similarity: candidate.similarity,
           },
         ]);

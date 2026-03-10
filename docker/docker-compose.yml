@@ -35,6 +35,10 @@ services:
       - "3000:3000"
     env_file:
       - ../.env
+    # Required env vars in ../.env:
+    #   GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY, GITHUB_WEBHOOK_SECRET
+    #   ANTHROPIC_API_KEY (intent extraction + judge)
+    #   OPENAI_API_KEY (embedding generation)
     environment:
       DATABASE_URL: postgresql://preview:preview_dev@postgres:5432/preview
       REDIS_URL: redis://redis:6379

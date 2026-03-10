@@ -108,9 +108,7 @@ describe("judgeDuplicate", () => {
 
 describe("buildJudgePrompt", () => {
   it("includes both PR details", async () => {
-    const { buildJudgePrompt } = await import(
-      "../../dedup/judge-prompts.js"
-    );
+    const { buildJudgePrompt } = await import("../../dedup/judge-prompts.js");
     const prompt = buildJudgePrompt(
       { githubNumber: 1, title: "PR A", body: "Body A", intentSummary: null },
       { githubNumber: 2, title: "PR B", body: "Body B", intentSummary: null },
