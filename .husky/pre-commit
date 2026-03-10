@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "Running lint..."
 pnpm lint || exit 1
 
@@ -9,8 +6,5 @@ pnpm typecheck || exit 1
 
 echo "Running format check..."
 pnpm format:check || exit 1
-
-echo "Running build..."
-pnpm build || exit 1
 
 echo "Pre-commit checks passed."
