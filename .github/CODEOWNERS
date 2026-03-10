@@ -1,0 +1,6 @@
+# CI/CD workflows
+.github/ @Jenish-1235
+.github/workflows/ @Jenish-1235
+
+# Infrastructure changes
+docker/ @Jenish-1235
