@@ -1,8 +1,10 @@
 import { Worker, type Job } from "bullmq";
 import { getDb, repositories, pullRequests } from "@preview/db";
+import { eq } from "drizzle-orm";
 import { getInstallationOctokit, paginateAll } from "../github/index.js";
 import { getRedisUrl } from "../queue/connection.js";
-import { QUEUE_NAMES } from "../queue/queues.js";
+import { getQueue, QUEUE_NAMES } from "../queue/queues.js";
+import type { IntentExtractionJobData } from "./types.js";
 
 import type { WebhookJobData, GitHubPR, GitHubRepo } from "./types.js";
 
@@ -124,6 +126,25 @@ async function processPREvent(job: Job<WebhookJobData>): Promise<void> {
   job.log(
     `Upserted PR #${ghPR.number} (${ghPR.title}) for ${ghRepo.full_name}`,
   );
+
+  // Trigger intent extraction pipeline
+  const [upsertedPR] = await db
+    .select({ id: pullRequests.id })
+    .from(pullRequests)
+    .where(eq(pullRequests.githubId, ghPR.id))
+    .limit(1);
+
+  if (upsertedPR) {
+    const intentQueue = getQueue(QUEUE_NAMES.INTENT_EXTRACTION);
+    const intentData: IntentExtractionJobData = {
+      prId: upsertedPR.id,
+      repoId: repo.id,
+      installationId: installation.id,
+      repoFullName: ghRepo.full_name,
+    };
+    await intentQueue.add(`intent.${ghPR.number}`, intentData);
+    job.log(`Enqueued intent extraction for PR #${ghPR.number}`);
+  }
 }
 
 export function createPRIngestionWorker(): Worker {
