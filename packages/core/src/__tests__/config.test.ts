@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { normalizeRankingWeights, validateStalenessConfig } from "../config.js";
+import {
+  normalizeRankingWeights,
+  validateStalenessConfig,
+} from "../config.js";
 import { DEFAULT_RANKING_WEIGHTS, DEFAULT_STALENESS } from "../constants.js";
 
 describe("normalizeRankingWeights", () => {
@@ -75,7 +78,7 @@ describe("normalizeRankingWeights", () => {
       authorEngagement: 0.1,
       responsiveness: 0.1,
       abandonmentRisk: 0.1,
-      visionAlignment: 0.1499,
+      visionAlignment: 0.1499, // sum = 0.9999, within 0.001 tolerance
     };
     const { wasNormalized } = normalizeRankingWeights(input);
     expect(wasNormalized).toBe(false);
@@ -149,6 +152,8 @@ describe("validateStalenessConfig", () => {
   });
 
   it("uses default staleness values correctly", () => {
+    // Default: warning=14, stale=30, close=60
+    // Setting only close to be less than default stale should fail
     const result = validateStalenessConfig({ closeAfterDays: 25 });
     expect(result.valid).toBe(false);
     expect(result.error).toContain(

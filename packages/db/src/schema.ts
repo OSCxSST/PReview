@@ -1,9 +1,6 @@
 /**
  * Drizzle ORM schema for PReview database.
- *
  * Matches the data model from TRD Section 5.
- * pgvector columns will be added once drizzle-orm/pg-vector
- * integration is configured with the actual DB connection.
  */
 
 import {
@@ -17,7 +14,9 @@ import {
   timestamp,
   uniqueIndex,
   index,
+  vector,
 } from "drizzle-orm/pg-core";
+import { EMBEDDING_DIMENSIONS } from "@preview/core";
 
 export const repositories = pgTable("repositories", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -82,7 +81,7 @@ export const pullRequests = pgTable(
       category: string;
       scope: string;
     }>(),
-    // embedding: vector column added via raw SQL migration (pgvector)
+    embedding: vector("embedding", { dimensions: EMBEDDING_DIMENSIONS }),
     qualityScore: real("quality_score"),
     abandonRisk: real("abandon_risk"),
     visionScore: real("vision_score"),
@@ -111,7 +110,7 @@ export const issues = pgTable(
     title: text("title").notNull(),
     body: text("body"),
     labels: text("labels").array(),
-    // embedding: vector column added via raw SQL migration (pgvector)
+    embedding: vector("embedding", { dimensions: EMBEDDING_DIMENSIONS }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .notNull()
@@ -156,7 +155,7 @@ export const visionChunks = pgTable(
     sourceFile: text("source_file"),
     chunkIndex: integer("chunk_index").notNull(),
     content: text("content").notNull(),
-    // embedding: vector column added via raw SQL migration (pgvector)
+    embedding: vector("embedding", { dimensions: EMBEDDING_DIMENSIONS }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
