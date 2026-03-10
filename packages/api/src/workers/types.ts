@@ -45,3 +45,32 @@ export interface GitHubInstallationRepo {
   full_name: string;
   node_id: string;
 }
+
+export interface IntentExtractionJobData {
+  prId: string;
+  repoId: string;
+  installationId: number;
+  repoFullName: string;
+}
+
+export interface EmbeddingJobData {
+  prId: string;
+  repoId: string;
+}
+
+export interface DedupJobData {
+  prId: string;
+  repoId: string;
+  installationId: number;
+  repoFullName: string;
+}
+
+export interface ActionDispatchJobData {
+  repoId: string;
+  installationId: number;
+  repoFullName: string;
+  targetType: "pr" | "issue";
+  targetNumber: number;
+  actionType: "comment" | "label" | "close" | "cluster_assign";
+  payload: Record<string, unknown>;
+}

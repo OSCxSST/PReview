@@ -20,6 +20,10 @@ export const QUEUE_NAMES = {
   PR_INGESTION: "pr-ingestion",
   ISSUE_INGESTION: "issue-ingestion",
   BATCH_SYNC: "batch-sync",
+  INTENT_EXTRACTION: "intent-extraction",
+  EMBEDDING: "embedding",
+  DEDUP: "dedup",
+  ACTION_DISPATCH: "action-dispatch",
 } as const;
 
 let queues: Map<string, Queue> | null = null;
@@ -49,6 +53,22 @@ function initQueues(): Map<string, Queue> {
   map.set(
     QUEUE_NAMES.BATCH_SYNC,
     createQueue(QUEUE_NAMES.BATCH_SYNC, BATCH_SYNC_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.INTENT_EXTRACTION,
+    createQueue(QUEUE_NAMES.INTENT_EXTRACTION, DEFAULT_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.EMBEDDING,
+    createQueue(QUEUE_NAMES.EMBEDDING, DEFAULT_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.DEDUP,
+    createQueue(QUEUE_NAMES.DEDUP, DEFAULT_JOB_OPTIONS),
+  );
+  map.set(
+    QUEUE_NAMES.ACTION_DISPATCH,
+    createQueue(QUEUE_NAMES.ACTION_DISPATCH, DEFAULT_JOB_OPTIONS),
   );
 
   return map;
