@@ -20,5 +20,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "openai": "^6.27.0"
   }
 }

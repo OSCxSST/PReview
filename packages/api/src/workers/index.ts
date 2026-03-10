@@ -2,6 +2,10 @@ import type { Worker } from "bullmq";
 import { createPRIngestionWorker } from "./pr-ingestion.worker.js";
 import { createIssueIngestionWorker } from "./issue-ingestion.worker.js";
 import { createBatchSyncWorker } from "./batch-sync.worker.js";
+import { createIntentExtractionWorker } from "./intent-extraction.worker.js";
+import { createEmbeddingWorker } from "./embedding.worker.js";
+import { createDedupWorker } from "./dedup.worker.js";
+import { createActionDispatchWorker } from "./action-dispatch.worker.js";
 
 let workers: Worker[] = [];
 
@@ -12,6 +16,10 @@ export function startWorkers(): void {
     createPRIngestionWorker(),
     createIssueIngestionWorker(),
     createBatchSyncWorker(),
+    createIntentExtractionWorker(),
+    createEmbeddingWorker(),
+    createDedupWorker(),
+    createActionDispatchWorker(),
   ];
 
   for (const worker of workers) {
