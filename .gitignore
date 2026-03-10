@@ -38,3 +38,4 @@ docker/data/
 # Credentials (never commit)
 credentials.json
 *.pem
+.cursor/

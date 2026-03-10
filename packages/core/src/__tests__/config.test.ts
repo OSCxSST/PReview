@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  normalizeRankingWeights,
-  validateStalenessConfig,
-} from "../config.js";
+import { normalizeRankingWeights, validateStalenessConfig } from "../config.js";
 import { DEFAULT_RANKING_WEIGHTS, DEFAULT_STALENESS } from "../constants.js";
 
 describe("normalizeRankingWeights", () => {
