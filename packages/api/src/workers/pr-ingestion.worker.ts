@@ -107,6 +107,7 @@ async function processPREvent(job: Job<WebhookJobData>): Promise<void> {
     filesChanged = files.map((f) => f.filename);
   } catch (err) {
     job.log(`Failed to fetch PR details: ${String(err)}`);
+    throw err;
   }
 
   // Upsert pull request
